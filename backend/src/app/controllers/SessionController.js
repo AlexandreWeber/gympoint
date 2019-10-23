@@ -5,8 +5,6 @@ import authConfig from '../../config/auth';
 
 class SessionController {
   async store(req, res) {
-    let errorsModel;
-
     const schema = Yup.object().shape({
       email: Yup.string()
         .email()
@@ -15,7 +13,9 @@ class SessionController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Dados incorretos, informe um email e senha' });
+      return res
+        .status(400)
+        .json({ error: 'Dados incorretos, informe um email e senha' });
     }
 
     const { email, password } = req.body;
