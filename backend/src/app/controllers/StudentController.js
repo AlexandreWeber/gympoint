@@ -17,10 +17,6 @@ class StudentController {
       return res.status(400).json({ error: `Dados incorretos` });
     }
 
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: `Dados incorretos` });
-    }
-
     const emailExists = req.body.email;
     const studentExists = await Student.findOne({
       where: { email: emailExists }
@@ -29,7 +25,7 @@ class StudentController {
     if (studentExists) {
       return res
         .status(400)
-        .json({ error: 'Já existe um estudante com email informado' });
+        .json({ error: 'Já existe um aluno com o email informado' });
     }
 
     const { id, name, email, age, weight, height } = await Student.create(
@@ -68,7 +64,7 @@ class StudentController {
     if (!student) {
       return res
         .status(400)
-        .json({ error: 'Id inválido, estudante não existe' });
+        .json({ error: 'Id inválido, aluno não existe' });
     }
 
     if (student.email !== email) {
@@ -80,7 +76,7 @@ class StudentController {
       if (studentExists) {
         return res
           .status(400)
-          .json({ error: `Estudante ${emailExists} já existe` });
+          .json({ error: `Aluno ${emailExists} já existe` });
       }
     }
 
@@ -104,12 +100,12 @@ class StudentController {
     if (!student) {
       return res
         .status(400)
-        .json({ error: 'Id inválido, estudante não existe' });
+        .json({ error: 'Id inválido, aluno não existe' });
     }
 
     await Student.destroy({ where: { id } });
 
-    return res.json({ message: 'Estudante removido com sucesso' });
+    return res.json({ message: 'Aluno removido com sucesso' });
   }
 
   async show({ res }) {
@@ -123,7 +119,7 @@ class StudentController {
     const student = await Student.findByPk(id);
 
     if (!student) {
-      return res.status(404).json({ error: 'Estudante não encontrado' });
+      return res.status(404).json({ error: 'Aluno não encontrado' });
     }
 
     return res.json(student);
