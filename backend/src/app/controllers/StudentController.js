@@ -62,9 +62,7 @@ class StudentController {
     const student = await Student.findByPk(id);
 
     if (!student) {
-      return res
-        .status(400)
-        .json({ error: 'Id inválido, aluno não existe' });
+      return res.status(400).json({ error: 'Id inválido, aluno não existe' });
     }
 
     if (student.email !== email) {
@@ -98,9 +96,7 @@ class StudentController {
     const student = await Student.findByPk(id);
 
     if (!student) {
-      return res
-        .status(400)
-        .json({ error: 'Id inválido, aluno não existe' });
+      return res.status(400).json({ error: 'Id inválido, aluno não existe' });
     }
 
     await Student.destroy({ where: { id } });
