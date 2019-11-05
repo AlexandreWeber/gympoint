@@ -15,7 +15,7 @@ class SessionController {
     if (!(await schema.isValid(req.body))) {
       return res
         .status(400)
-        .json({ error: 'Dados incorretos, informe um email e senha' });
+        .json({ error: 'Incorrect data, provide an email and a password' });
     }
 
     const { email, password } = req.body;
@@ -23,11 +23,11 @@ class SessionController {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
+      return res.status(404).json({ error: 'User was not found' });
     }
 
     if (!(await user.checkPassword(password))) {
-      return res.status(401).json({ error: 'Email e/ou Senha inválido (s)' });
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const { id, name } = user;

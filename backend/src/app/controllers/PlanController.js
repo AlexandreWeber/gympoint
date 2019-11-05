@@ -10,14 +10,14 @@ class PlanController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: `Dados incorretos` });
+      return res.status(400).json({ error: `Incorrect data` });
     }
 
     const planExists = await Plan.findOne({ where: { title: req.body.title } });
     if (planExists) {
       return res
         .status(400)
-        .json({ error: 'Já existe um plano com o nome informado' });
+        .json({ error: 'There is already a plan with the provided name' });
     }
 
     const { id, title, duration, price } = await Plan.create(req.body);
@@ -46,13 +46,13 @@ class PlanController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: `Dados incorretos` });
+      return res.status(400).json({ error: `Incorrect data` });
     }
 
     const plan = await Plan.findByPk(id);
 
     if (!plan) {
-      return res.status(400).json({ error: 'Id inválido, plano não existe' });
+      return res.status(400).json({ error: 'Invalid Id, plan does not exists' });
     }
 
     const { title } = req.body;
@@ -65,7 +65,7 @@ class PlanController {
       if (planExists) {
         return res
           .status(400)
-          .json({ error: 'Já existe um plano com o nome informado' });
+          .json({ error: 'There is already a plan with the provided name' });
       }
     }
 
@@ -85,12 +85,12 @@ class PlanController {
     const plan = await Plan.findByPk(id);
 
     if (!plan) {
-      return res.status(400).json({ error: 'Id inválido, plano não existe' });
+      return res.status(400).json({ error: 'Invalid Id, plan does not exists' });
     }
 
     await Plan.destroy({ where: { id } });
 
-    return res.json({ message: 'Plano removido com sucesso' });
+    return res.json({ message: 'Plan removed successfully' });
   }
 }
 
