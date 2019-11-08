@@ -14,7 +14,7 @@ class StudentController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: `Dados incorretos` });
+      return res.status(400).json({ error: `Incorrect Data` });
     }
 
     const emailExists = req.body.email;
@@ -25,7 +25,7 @@ class StudentController {
     if (studentExists) {
       return res
         .status(400)
-        .json({ error: 'Já existe um aluno com o email informado' });
+        .json({ error: 'There is already a student with the provided email' });
     }
 
     const { id, name, email, age, weight, height } = await Student.create(
@@ -55,14 +55,14 @@ class StudentController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: `Dados incorretos` });
+      return res.status(400).json({ error: `Incorrect Data` });
     }
 
     const { email } = req.body;
     const student = await Student.findByPk(id);
 
     if (!student) {
-      return res.status(400).json({ error: 'Id inválido, aluno não existe' });
+      return res.status(400).json({ error: 'Invalid id, student does not exists' });
     }
 
     if (student.email !== email) {
@@ -74,7 +74,7 @@ class StudentController {
       if (studentExists) {
         return res
           .status(400)
-          .json({ error: `Aluno ${emailExists} já existe` });
+          .json({ error: `Student ${emailExists} already exists` });
       }
     }
 
@@ -96,12 +96,12 @@ class StudentController {
     const student = await Student.findByPk(id);
 
     if (!student) {
-      return res.status(400).json({ error: 'Id inválido, aluno não existe' });
+      return res.status(400).json({ error: 'Invalid id, student does not exists' });
     }
 
     await Student.destroy({ where: { id } });
 
-    return res.json({ message: 'Aluno removido com sucesso' });
+    return res.json({ message: 'Student successfully removed' });
   }
 
   async show({ res }) {
@@ -115,7 +115,7 @@ class StudentController {
     const student = await Student.findByPk(id);
 
     if (!student) {
-      return res.status(404).json({ error: 'Aluno não encontrado' });
+      return res.status(404).json({ error: 'Student was not found' });
     }
 
     return res.json(student);
