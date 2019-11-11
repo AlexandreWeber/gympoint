@@ -2,6 +2,8 @@ import { parseISO, isBefore } from 'date-fns';
 import Enrolment from '../model/Enrolment';
 import Student from '../model/Student';
 import Plan from '../model/Plan';
+import Queue from '../../lib/Queue';
+import EnrolmentMail from '../jobs/EnrolmentMail';
 
 class EnrolmentController {
   async store(req, res) {
@@ -19,19 +21,31 @@ class EnrolmentController {
       return res.status(400).json({ error: 'Plan provided was not found' });
     }
 
-    const enrolment = await Enrolment.create({
+    let enrolment = await Enrolment.create({
       student_id,
       plan_id,
       start_date
     });
 
-    return res.json({
-      id: enrolment.id,
-      plan: enrolment.plan_id,
-      start_date,
-      end_date: enrolment.end_date,
-      price: enrolment.price
+    enrolment = await Enrolment.findByPk(enrolment.id, {
+      attributes: ['id', 'start_date', 'end_date', 'price'],
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['id', 'name', 'email']
+        },
+        {
+          model: Plan,
+          as: 'plan',
+          attributes: ['id', 'title']
+        }
+      ]
     });
+
+    await Queue.add(EnrolmentMail.key, { enrolment });
+
+    return res.json(enrolment);
   }
 
   async show(req, res) {
